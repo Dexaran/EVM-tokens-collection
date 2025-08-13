@@ -37,7 +37,7 @@ abstract contract IERC223Recipient {
 /**
  * @title Reference implementation of the ERC223 standard token.
  */
-contract ERC223Token {
+contract ERC223TokenMintable {
 
      /**
      * @dev Event that is fired on successful transfer.
@@ -49,6 +49,7 @@ contract ERC223Token {
     string  private _symbol;
     uint8   private _decimals;
     uint256 private _totalSupply;
+    string  public imageURL;
     
     mapping(address => uint256) private balances; // List of user balances.
 
@@ -62,11 +63,12 @@ contract ERC223Token {
      * construction.
      */
      
-    constructor(string memory new_name, string memory new_symbol, uint256 supply)
+    constructor(string memory new_name, string memory new_symbol, uint256 supply, string memory _URL)
     {
         _name     = new_name;
         _symbol   = new_symbol;
         _totalSupply = supply;
+        imageURL = _URL;
         balances[msg.sender] = supply;
         emit Transfer(address(0), msg.sender, supply);
     }
@@ -145,19 +147,17 @@ contract ERC223Token {
      * @param _value Amount of tokens that will be transferred.
      * @param _data  Transaction metadata.
      */
-    function transfer(address _to, uint _value, bytes calldata _data) public returns (bool success)
+    function transfer(address _to, uint _value, bytes calldata _data) public payable returns (bool success)
     {
         // Standard function transfer similar to ERC20 transfer with no _data .
         // Added due to backwards compatibility reasons .
         balances[msg.sender] = balances[msg.sender] - _value;
         balances[_to] = balances[_to] + _value;
-
         if (msg.value > 0) 
         {
             (bool sent, bytes memory transfer_data) = _to.call{value: msg.value}("");
             require(sent);
         }
-
         if(Address.isContract(_to)) {
             IERC223Recipient(_to).tokenReceived(msg.sender, _value, _data);
         }
