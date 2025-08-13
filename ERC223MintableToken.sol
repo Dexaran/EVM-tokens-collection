@@ -50,6 +50,7 @@ contract ERC223TokenMintable {
     uint8   private _decimals;
     uint256 private _totalSupply;
     address public owner = msg.sender;
+    string  public imageURL;
     
     mapping(address => uint256) private balances; // List of user balances.
 
@@ -63,11 +64,12 @@ contract ERC223TokenMintable {
      * construction.
      */
      
-    constructor(string memory new_name, string memory new_symbol, uint256 supply)
+    constructor(string memory new_name, string memory new_symbol, uint256 supply, string memory _URL)
     {
         _name     = new_name;
         _symbol   = new_symbol;
         _totalSupply = supply;
+        imageURL = _URL;
         balances[msg.sender] = supply;
         emit Transfer(address(0), msg.sender, supply);
     }
