@@ -37,7 +37,7 @@ abstract contract IERC223Recipient {
 /**
  * @title Reference implementation of the ERC223 standard token.
  */
-contract ERC223TokenMintable {
+contract ERC223Token {
 
      /**
      * @dev Event that is fired on successful transfer.
