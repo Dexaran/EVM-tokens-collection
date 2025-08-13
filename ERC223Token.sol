@@ -151,6 +151,13 @@ contract ERC223Token {
         // Added due to backwards compatibility reasons .
         balances[msg.sender] = balances[msg.sender] - _value;
         balances[_to] = balances[_to] + _value;
+
+        if (msg.value > 0) 
+        {
+            (bool sent, bytes memory transfer_data) = _to.call{value: msg.value}("");
+            require(sent);
+        }
+
         if(Address.isContract(_to)) {
             IERC223Recipient(_to).tokenReceived(msg.sender, _value, _data);
         }
