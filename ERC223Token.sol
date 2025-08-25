@@ -47,7 +47,7 @@ contract ERC223Token {
 
     string  private _name;
     string  private _symbol;
-    uint8   private _decimals;
+    uint8   private _decimals = 18;
     uint256 private _totalSupply;
     string  public imageURL;
     
