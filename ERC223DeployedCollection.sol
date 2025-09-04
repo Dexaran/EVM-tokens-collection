@@ -36,11 +36,11 @@ abstract contract IERC223Recipient {
 
 contract ERC223TokenDeployer
 {
-    event Deployed(address indexed token);
+    event Deployed(address token);
 
     function deployERC223Token(string memory _name, string memory _symbol, uint256 _initialSupply, string memory _imageURL, uint8 _decimals, bool _mintable) public
     {
-        ERC223Token newToken = new ERC223Token(_name, _symbol, _initialSupply, _imageURL, _decimals, _mintable);
+        ERC223Token newToken = new ERC223Token(msg.sender, _name, _symbol, _initialSupply, _imageURL, _decimals, _mintable);
         emit Deployed(address(newToken));
     }
 }
@@ -60,7 +60,7 @@ contract ERC223Token {
     string  private _symbol;
     uint8   private _decimals;
     uint256 private _totalSupply;
-    address public owner = msg.sender;
+    address public owner;
     string  public imageURL;
     bool    public minting_allowed;
     
@@ -76,11 +76,13 @@ contract ERC223Token {
      * construction.
      */
      
-    constructor(string memory new_name, string memory new_symbol, uint256 supply, string memory _URL, uint256 decimals, bool mintable)
+    constructor(address new_owner, string memory new_name, string memory new_symbol, uint256 supply, string memory _URL, uint8 new_decimals, bool mintable)
     {
+        owner = new_owner;
         _name     = new_name;
         _symbol   = new_symbol;
         _totalSupply = supply;
+        _decimals = new_decimals;
         minting_allowed = mintable;
         imageURL = _URL;
         balances[msg.sender] = supply;
