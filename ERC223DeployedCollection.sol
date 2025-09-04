@@ -85,8 +85,8 @@ contract ERC223Token {
         _decimals = new_decimals;
         minting_allowed = mintable;
         imageURL = _URL;
-        balances[msg.sender] = supply;
-        emit Transfer(address(0), msg.sender, supply);
+        balances[new_owner] = supply;
+        emit Transfer(address(0), new_owner, supply);
     }
 
     function mint(address _destination, uint256 _amount) public returns (bool)
